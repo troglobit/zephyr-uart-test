@@ -1,5 +1,5 @@
-Welcome To the UART Playground
-==============================
+Zephyr UART Playground
+======================
 
 How to build this, provided you have already set up your NCS/nRF
 toolchain on your Linux system.
@@ -15,3 +15,10 @@ toolchain on your Linux system.
     picocom -qb 115200    /dev/ttyACM1
 	
 
+Caveats
+-------
+
+The emulated UARTs on the nRF5340DK, via the SEGGER interface, don't
+like non-standard stop or parity bits.
+
+Only 8N1 with different baud rates work.
