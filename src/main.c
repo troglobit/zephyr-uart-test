@@ -76,6 +76,7 @@ void print_uart(const struct device *dev, char *buf)
 void main(void)
 {
 	const struct device *dev;
+	struct uart_config cfg;
 	char rx_buf[MSG_SIZE];
 	char tx_buf[MSG_SIZE];
 	struct cb_data cb = {
@@ -90,7 +91,20 @@ void main(void)
 		return;
 	}
 	if (!device_is_ready(dev)) {
-		printk("UART device not found!");
+		printk("UART %s device not found!\n", UART_DEVICE);
+		return;
+	}
+
+	if (uart_config_get(dev, &cfg)) {
+		printk("Failed reading UART %s config\n", UART_DEVICE);
+		return;
+	}
+
+	printk("Setting UART %s to 2400 baud even parity, one stop bit\n", UART_DEVICE);
+	cfg.baudrate = 2400;
+	cfg.parity = UART_CFG_PARITY_EVEN;
+	if (uart_configure(dev, &cfg)) {
+		printk("Failed setting up UART %s config\n", UART_DEVICE);
 		return;
 	}
 
